@@ -24,6 +24,9 @@ npm-debug.*
 yarn-debug.*
 yarn-error.*
 
+# api key
+src/util/keys.js
+
 # macOS
 .DS_Store
 *.pem

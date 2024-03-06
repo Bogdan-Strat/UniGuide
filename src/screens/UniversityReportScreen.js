@@ -72,7 +72,7 @@ const UniversityReportScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F0F0F0',
     },
 });
 

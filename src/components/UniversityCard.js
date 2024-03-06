@@ -3,9 +3,9 @@ import { FontAwesome, FontAwesome6  } from '@expo/vector-icons';
 
 const UniversityCard = ({ name, location, isLast }) => {
     return (
-        <Flex mt={5} direction={'column'} mx={5} mb={isLast ? 5 : 0} p={5} borderWidth={1} rounded={16} shadow={1} borderColor={'#F0F8FF'} bgColor={'#F0F8FF'}>
+        <Flex mt={5} direction={'column'} mx={5} mb={isLast ? 5 : 0} p={5} borderWidth={1} rounded={16} shadow={1} borderColor={'#FFFFFF'} bgColor={'#FFFFFF'}>
             <Flex direction={'row'} alignItems={'center'} gap={3}>
-                <Flex bgColor={'#FFFFFF'} rounded={'full'} p={3}>
+                <Flex bgColor={'#F0F0F0'} rounded={'full'} p={3}>
                     <FontAwesome name="university" size={24} color="#3983ca" />
                 </Flex>
                 <Flex direction={'column'} gap={2}>

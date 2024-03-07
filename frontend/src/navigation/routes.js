@@ -9,7 +9,11 @@ const Routes = {
     ADD_PRODUCT_IMAGE: 'AddProductImage',
     CAMERA: 'Camera',
     PROFILE: 'Profile',
-    CHAT: 'Chat'
+    CHAT: 'Chat',
+    BUDGET: 'Budget',
+    COUNTRY: 'Country',
+    GRADE: 'Grade',
+    CREATE_REPORT: 'CreateReport'
   };
   
   export { Routes };

@@ -1,9 +1,9 @@
 import { Flex, Text, Avatar, Pressable } from "native-base";
-import { FontAwesome, Feather, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Feather, Ionicons, MaterialCommunityIcons  } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import { useEffect, useState } from "react";
 
-const StudentCard = ({name, university, phoneNumber, email, isLast}) => {
+const StudentCard = ({name, university, domain, phoneNumber, email, isLast}) => {
     const [isEmailPressed, setIsEmailPressed] = useState(false);
     const [isPhonePressed, setIsPhonePressed] = useState(false);
     
@@ -20,7 +20,7 @@ const StudentCard = ({name, university, phoneNumber, email, isLast}) => {
     }, [isPhonePressed])
 
     return (
-        <Flex direction={'row'} p={5} mx={5} mt={5} bgColor={'#FFFFFF'} borderWidth={1} borderColor={'#FFFFFF'} borderRadius={16} mb={isLast ? 5 : 0}>
+        <Flex direction={'row'} p={5} mx={5} mt={5} bgColor={'#FFFFFF'} borderWidth={1} borderColor={'#FFFFFF'} borderRadius={16} mb={isLast ? 5 : 0} shadow={1}>
             <Avatar bg="green.500" size={'sm'} mr="2" source={{
                 uri: "https://bit.ly/broken-link"
             }}>
@@ -31,6 +31,10 @@ const StudentCard = ({name, university, phoneNumber, email, isLast}) => {
                 <Flex direction={'row'} alignItems={'center'} gap={1}>
                     <Ionicons name="school-outline" size={20} color="black" />
                     <Text fontSize={14} fontWeight={'semibold'}>{university}</Text>
+                </Flex>
+                <Flex direction={'row'} alignItems={'center'} gap={1}>
+                    <MaterialCommunityIcons name="book-education-outline" size={20} color="black" />
+                    <Text fontSize={14} >{domain}</Text>
                 </Flex>
                 <Flex direction={'row'} alignItems={'center'} gap={1}>
                     <FontAwesome name="whatsapp" size={20} color="#25D366" />

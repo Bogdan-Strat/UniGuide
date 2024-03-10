@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { isUserAuthenticatedSelector } from '../selectors/auth.js';
 import { Fab, IconButton } from 'native-base';
 import { Box } from 'native-base';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 
 // Screens
 import HomeScreen from '../screens/HomeScreen.js';
@@ -19,18 +19,20 @@ import ProfileScreen from '../screens/ProfileScreen.js';
 import ChatScreen from '../screens/ChatScreen.js';
 
 // Icons
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LandingScreen from '../screens/unauth/LandingScreen.js';
 import SignInScreen from '../screens/unauth/SignInScreen.js';
 import SignUpScreen from '../screens/unauth/SignUpScreen.js';
 import NewChatScreen from '../screens/NewChatScreen.js';
+import HomeCountryScreen from '../screens/isFirstTime/HomeCountryScreen.js';
+import AvgGradeScreen from '../screens/isFirstTime/AvgGradeScreen.js';
+import BudgetScreen from '../screens/isFirstTime/BudgetScreen.js';
+import CreateUniversityReportScreen from '../screens/isFirstTime/CreateUniversityRportScreen.js';
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProductAddStack = createStackNavigator();
+const IsFirstTimeStack = createStackNavigator();
 
 function HomeStackScreen() {
   return (
@@ -43,9 +45,10 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name='Chat'
         component={ChatScreen}
-        options={{ headerShown: false,  
+        options={{
+          headerShown: false,
           ...TransitionPresets.SlideFromRightIOS
-          
+
         }}
       />
     </HomeStack.Navigator>
@@ -124,7 +127,7 @@ function BottomNav({ navigation }) {
         screenOptions={{
           tabBarStyle: { position: 'absolute' },
           title: '',
-          tabBarActiveTintColor: '#F28B40',
+          tabBarActiveTintColor: '#3399ff',
         }}
         screenOptions={{
           showLabel: false,
@@ -136,7 +139,7 @@ function BottomNav({ navigation }) {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
-              return <Feather name='map' size={26} color={color} />;
+              return <Feather name='home' size={26} color={color} />;
             },
           }}
         />
@@ -164,7 +167,7 @@ function BottomNav({ navigation }) {
                   shadow='6'
                   p='3'
                   borderRadius='full'
-                  style={{ backgroundColor: '#D94506' }}
+                  style={{ backgroundColor: '#3399ff' }}
                 >
                   <Ionicons
                     name='add-outline'
@@ -246,31 +249,61 @@ function RootNavigator() {
   );
 }
 
+function IsFirstTimeNavigator() {
+  return (
+    <IsFirstTimeStack.Navigator initialRouteName="Country">
+      <IsFirstTimeStack.Screen
+        name='Country'
+        component={HomeCountryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <IsFirstTimeStack.Screen
+        name='Budget'
+        component={BudgetScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <IsFirstTimeStack.Screen
+        name='Grade'
+        component={AvgGradeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <IsFirstTimeStack.Screen
+        name='CreateReport'
+        component={CreateUniversityReportScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </IsFirstTimeStack.Navigator>
+  )
+}
+
 const MainNavigation = () => {
   //   const authenticated = useSelector(isUserAuthenticatedSelector);
   const authenticated = true;
+  const isFirstTime = false;
   //const authenticated = false;
   return (
     <NavigationContainer>
       {!authenticated ? (
         <RootNavigator />
-      ) : (
+      ) : isFirstTime 
+        ? (<IsFirstTimeNavigator />)
+        : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name='HomeBase'
             //options={{ headerShown: false }}
             component={BottomNav}
-            options={({ route }) => ({
-              tabBarStyle: ((route) => {
-                const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-                console.log(routeName)
-                if (routeName === 'Chat') {
-                  return { display: "none" }
-                }
-                return
-              })(route),
+            options={{
               headerShown: false
-            })}
+            }}
           />
           {/* <Stack.Screen
             name='SplashScreen'
@@ -287,7 +320,8 @@ const MainNavigation = () => {
           /> */}
           {/* add your another screen here using -> Stack.Screen */}
         </Stack.Navigator>
-      )}
+      )
+      }
     </NavigationContainer>
   );
 };

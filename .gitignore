@@ -26,6 +26,7 @@ yarn-error.*
 
 # api key
 frontend/src/util/keys.js
+src/util/*
 
 # macOS
 .DS_Store

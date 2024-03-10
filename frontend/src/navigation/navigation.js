@@ -127,7 +127,7 @@ function BottomNav({ navigation }) {
         screenOptions={{
           tabBarStyle: { position: 'absolute' },
           title: '',
-          tabBarActiveTintColor: '#F28B40',
+          tabBarActiveTintColor: '#3399ff',
         }}
         screenOptions={{
           showLabel: false,
@@ -167,7 +167,7 @@ function BottomNav({ navigation }) {
                   shadow='6'
                   p='3'
                   borderRadius='full'
-                  style={{ backgroundColor: '#D94506' }}
+                  style={{ backgroundColor: '#3399ff' }}
                 >
                   <Ionicons
                     name='add-outline'
@@ -287,7 +287,7 @@ function IsFirstTimeNavigator() {
 const MainNavigation = () => {
   //   const authenticated = useSelector(isUserAuthenticatedSelector);
   const authenticated = true;
-  const isFirstTime = true;
+  const isFirstTime = false;
   //const authenticated = false;
   return (
     <NavigationContainer>

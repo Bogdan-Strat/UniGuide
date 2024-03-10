@@ -23,7 +23,12 @@ const PayModal = ({showModal, setShowModal}) => {
               <Button rounded={'full'} onPress={() => {
                 Linking.openURL('https://buy.stripe.com/test_eVa2c6eMegMofpSbIJ')
               setShowModal(false);
-            }}>
+            }}
+            bgColor={'#3399ff'}
+                        _pressed={{
+                            bgColor: '#005fbd',
+                          }}>
+
                 Go to payment
               </Button>
             </Button.Group>

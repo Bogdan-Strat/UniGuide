@@ -50,14 +50,19 @@ const BudgetScreen = ({navigation, route }) => {
                         rounded={'full'}
                         mt={10}
                         w={'90%'}
-                        onPress={() => { nextScreen() }}>
+                        onPress={() => { nextScreen() }}
+                        bgColor={'#3399ff'}
+                        _pressed={{
+                            bgColor: '#005fbd',
+                          }}
+                          >
                         Next
                     </Button>
                     <Flex justifyContent={'center'} alignItems={'center'} gap={2} position={'absolute'} bottom={10} direction={'row'}>
                         <Flex bgColor={'#808080'} w={2} h={2} rounded={'full'}>
 
                         </Flex>
-                        <Flex bgColor={'#0890b2'} w={2} h={2} rounded={'full'}>
+                        <Flex bgColor={'#3399ff'} w={2} h={2} rounded={'full'}>
 
                         </Flex>
                         <Flex bgColor={'#808080'} w={2} h={2} rounded={'full'}>

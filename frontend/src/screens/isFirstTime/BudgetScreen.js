@@ -64,6 +64,7 @@ const BudgetScreen = ({navigation, route }) => {
                         </Flex>
                         <Flex bgColor={'#3399ff'} w={2} h={2} rounded={'full'}>
 
+
                         </Flex>
                         <Flex bgColor={'#808080'} w={2} h={2} rounded={'full'}>
 

@@ -47,6 +47,7 @@ const HomeCountryScreen = ({navigation}) => {
                     <Flex justifyContent={'center'} alignItems={'center'} gap={2} position={'absolute'} bottom={10} direction={'row'}>
                         <Flex  bgColor={'#3399ff'} w={2} h={2} rounded={'full'}>
 
+
                         </Flex>
                         <Flex  bgColor={'#808080'} w={2} h={2} rounded={'full'}>
 

@@ -48,12 +48,12 @@ const ProfileScreen = ({ navigation }) => {
                         size={'lg'} 
                         rounded={'full'}
                         w={'90%'}
-                        onPress={() => setShowModal(true)}
                         bgColor={'#3399ff'}
                         _pressed={{
                             bgColor: '#005fbd',
                           }}>
                         Buy infinite balance
+                        onPress={() => setShowModal(true)}>
                     </Button>
                     </Flex>
                     <Pressable p={5} mb={5} w={'90%'} mx={5} mt={5} rounded={16} bgColor={'#FFFFFF'} _pressed={{ bgColor: '#A9A9A9' }}>

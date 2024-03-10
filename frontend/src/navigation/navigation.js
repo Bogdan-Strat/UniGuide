@@ -128,7 +128,6 @@ function BottomNav({ navigation }) {
           tabBarStyle: { position: 'absolute' },
           title: '',
           tabBarActiveTintColor: '#3399ff',
-          showLabel: false,
         }}
         screenOptions={{
           showLabel: false,

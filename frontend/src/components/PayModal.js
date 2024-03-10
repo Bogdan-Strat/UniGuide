@@ -28,6 +28,7 @@ const PayModal = ({showModal, setShowModal}) => {
                         _pressed={{
                             bgColor: '#005fbd',
                           }}>
+
                 Go to payment
               </Button>
             </Button.Group>

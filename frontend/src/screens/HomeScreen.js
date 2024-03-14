@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation, route }) => {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <ScreenHeader title={'Home'} isHomeScreen={true} />
                 <ScrollView>
-                    {conversations.length !== 0 
+                    {conversations.length === 0 
                     ? <Flex bgColor={'#FFFFFF'} mx={5} mt={200} justifyContent={'center'} alignItems={'center'}>
                     <AnimatedLottieView
                     source={require('../animations/Discussion2.json')}

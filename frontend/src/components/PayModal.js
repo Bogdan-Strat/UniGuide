@@ -1,17 +1,27 @@
-import { Modal, Input, FormControl, Button } from "native-base";
+import { Modal, Input, Radio, Button } from "native-base";
 import * as Linking from 'expo-linking';
+import { useState } from "react";
 
 const PayModal = ({showModal, setShowModal}) => {
+    const [value, setValue] = useState("1")
+
     return (
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
           <Modal.Header>Add balance</Modal.Header>
           <Modal.Body>
-            <FormControl>
-              <FormControl.Label>Amount (€)</FormControl.Label>
-              <Input rounded={'full'} keyboardType="numeric" placeholder="Enter the amount you want to add..." />
-            </FormControl>
+          <Radio.Group value={value} onChange={setValue} name="myRadioGroup" accessibilityLabel="Pick your favorite number">
+            <Radio value="1" my={1}>
+              1 €
+            </Radio>
+            <Radio value="2" my={1}>
+              2.5 €
+            </Radio>
+            <Radio value="3" my={1}>
+              5 €
+            </Radio>
+        </Radio.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>

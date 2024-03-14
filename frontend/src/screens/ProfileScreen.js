@@ -9,12 +9,13 @@ import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { useState, useEffect } from "react";
 import PayModal from "../components/PayModal";
 import { NETWORK_IP } from "../util/constant";
-import { useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import * as Linking from 'expo-linking';
 import { isUserAuthenticatedSelector, nameSelector } from "../selectors/auth";
+import { tokenActionCreators as  actionCreators} from '../store/actions/actionCreator';
 
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({ navigation, logout }) => {
     const [showModal, setShowModal] = useState(false);
     const [profile, setProfile] = useState(null)
     const [balance, setBalance] = useState(0);
@@ -107,7 +108,16 @@ const ProfileScreen = ({ navigation }) => {
                             Buy infinite balance
                         </Button>
                         </Flex>}
-                        <Pressable p={5} mb={5} w={'90%'} mx={5} mt={5} rounded={16} bgColor={'#FFFFFF'} _pressed={{ bgColor: '#A9A9A9' }}>
+                        <Pressable 
+                            p={5}
+                            mb={5}
+                            w={'90%'} 
+                            mx={5} 
+                            mt={5} 
+                            rounded={16} 
+                            bgColor={'#FFFFFF'}
+                            onPress={() => logout()}
+                             _pressed={{ bgColor: '#A9A9A9' }}>
                             <Flex direction={'row'} alignItems={'center'} gap={3}>
                                 <MaterialIcons name="logout" size={24} color="black" />
                                 <Text>Sign out</Text>
@@ -129,4 +139,14 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProfileScreen;
+const mapDispatchToProps = (dispatch) => {
+    return {
+      dispatch,
+      logout: () => {
+        dispatch(actionCreators.logout());
+      },
+    };
+  };
+
+
+export default connect(null, mapDispatchToProps)(ProfileScreen);

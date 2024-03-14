@@ -5,48 +5,28 @@ import ScreenHeader from "../components/ScreenHeader"
 import Routes from "../navigation/routes"
 import { useEffect, useState } from "react"
 import UniversityCard from "../components/UniversityCard"
-
-const data = [
-    {
-        name: 'Massachutes Institue of Technology',
-        location: 'Cambridge, USA'
-    },
-    {
-        name: 'Harvard University',
-        location: 'Cambridge, USA'
-    },
-    {
-        name: 'Stockholm University',
-        location: 'Stockholm, Sweden'
-    },
-    {
-        name: 'University of Bucharest',
-        location: 'Bucharest, Romania'
-    },
-    {
-        name: 'Oxford University',
-        location: 'Oxford, UK'
-    },
-    {
-        name: 'Oxford University',
-        location: 'Oxford, UK'
-    },
-    {
-        name: 'Oxford University',
-        location: 'Oxford, UK'
-    },
-    {
-        name: 'Oxford University',
-        location: 'Oxford, UK'
-    },
-]
+import { NETWORK_IP } from "../util/constant"
+import { useSelector } from "react-redux";
+import { isUserAuthenticatedSelector } from "../selectors/auth";
 
 const UniversityReportScreen = ({navigation}) => {
-    const [universities, setUniversities] = useState([])
+    const [universities, setUniversities] = useState([]);
+    const token = useSelector(isUserAuthenticatedSelector);
 
     useEffect(() => {
         const getUniversities = async () => {
-            setUniversities(data)
+            const response = await fetch(`http://${NETWORK_IP}:7262/University/getUniversities`,
+                {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                })
+            
+            if(response.ok){
+                const data = await response.json();
+                setUniversities(data);
+            }
         }
 
         getUniversities();

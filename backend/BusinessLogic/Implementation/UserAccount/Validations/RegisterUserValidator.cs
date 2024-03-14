@@ -37,7 +37,7 @@ namespace BusinessLogic.Implementation.UserAccount.Validations
                 .MaximumLength(100)
                 .WithMessage("The maximum length is 100 characters.");
 
-            RuleFor(r => r.Username)
+            RuleFor(r => r.Name)
                .NotEmpty().WithMessage("Required field!")
                //.MustAsync((model, _, _) => UsernameNotAlreadyExist(model.Username)).When(model => model.Username != null)
                .WithMessage("There is already an account with this name!")

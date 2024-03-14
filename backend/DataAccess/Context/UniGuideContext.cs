@@ -43,6 +43,12 @@ namespace DataAccess.Context
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.Property(e => e.ThreadId).HasMaxLength(100);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Chats)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ChatUser");
             });
 
             modelBuilder.Entity<Domain.Entities.Domain>(entity =>
@@ -94,6 +100,8 @@ namespace DataAccess.Context
                 entity.Property(e => e.MonthBudgetNonEu).HasColumnName("MonthBudgetNonEU");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Location).HasMaxLength(100);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -118,18 +126,18 @@ namespace DataAccess.Context
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(20);
 
-                entity.HasMany(d => d.Chats)
-                    .WithMany(p => p.Users)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "UserXchat",
-                        l => l.HasOne<Chat>().WithMany().HasForeignKey("ChatId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_UserXChatChat"),
-                        r => r.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_UserXChatUser"),
-                        j =>
-                        {
-                            j.HasKey("UserId", "ChatId");
+                //entity.HasMany(d => d.Chats)
+                //    .WithMany(p => p.Users)
+                //    .UsingEntity<Dictionary<string, object>>(
+                //        "UserXchat",
+                //        l => l.HasOne<Chat>().WithMany().HasForeignKey("ChatId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_UserXChatChat"),
+                //        r => r.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_UserXChatUser"),
+                //        j =>
+                //        {
+                //            j.HasKey("UserId", "ChatId");
 
-                            j.ToTable("UserXChat");
-                        });
+                //            j.ToTable("UserXChat");
+                //        });
 
                 entity.HasMany(d => d.Universities)
                     .WithMany(p => p.Users)

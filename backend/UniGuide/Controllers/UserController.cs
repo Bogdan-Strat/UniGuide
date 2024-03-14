@@ -45,8 +45,6 @@ namespace UniGuide.Controllers
             {
                 throw new ArgumentNullException("model");
             }
-            model.Email?.Trim();
-            model.Username.Trim();
 
             await userService.RegisterNewUser(model);
 
@@ -69,39 +67,23 @@ namespace UniGuide.Controllers
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
+                name = user.Name,
+                isFirstTime = user.IsFirstTime,
             });
         }
 
-        [HttpPost("createAccountFromGoogle")]
-        public async Task<IActionResult> CreateAccountFromGoogle([FromBody] CreateAccountFromGoogleModel model)
-        {
-            //if there is not already an account - create account account and login
-
-            
-            var user = await userService.LoginAndCreateUserWithGoogleAccount(model);
-
-            if (!user.IsAuthenticated)
-            {
-                return Unauthorized();
-            }
-
-            var token = LogIn(user);
-
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
-            });
-        }
 
         private JwtSecurityToken LogIn(CurrentUserDTO user)
         {
             var authClaims = new List<Claim>
                 {
                     new Claim("Email", user.Email),
-                    new Claim("Username", user.Username),
-                    //new Claim("Photo", user.Photo),
+                    new Claim("Name", user.Name),
+                    new Claim("IsFirstTime", user.IsFirstTime.ToString()),
+                    new Claim("HomeCountry", user.HomeCountry),
+                    new Claim("Budget", user.Budget.ToString()),
+                    new Claim("Grade", user.Grade.ToString()),
                     new Claim("Id", user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     //new Claim(ClaimTypes.Role, user.Role),
@@ -125,6 +107,42 @@ namespace UniGuide.Controllers
                 );
 
             return token;
+        }
+
+        [HttpPost("getUniversitiesForCreateUniversityReport")]
+        [Authorize]
+        public async Task<IActionResult> GetUniversitiesForCreateUniversityReport(CreateProfileModel model)
+        {
+            var universities = await userService.GetListOfUniversitiesForCreateUniversityReport(model);
+
+            return Ok(universities);
+        }
+
+        [HttpPost("saveUniversityReport")]
+        [Authorize]
+        public async Task<IActionResult> SaveUniversityReport(List<CreateUniversityReportModel> universities)
+        {
+            await userService.SaveUniversityReport(universities);
+
+            return Ok();
+        }
+
+        [HttpGet("getProfile")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
+        {
+            var profile = await userService.GetProfile();
+
+            return Ok(profile);
+        }
+
+        [HttpGet("addBalance")]
+        [Authorize]
+        public async Task<IActionResult> AddBalance(decimal balance)
+        {
+            await userService.AddBalance(balance);
+
+            return Ok();
         }
     }
 }

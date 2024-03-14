@@ -1,4 +1,7 @@
 ﻿using BusinessLogic.Base;
+using BusinessLogic.Implementation.Chats;
+using BusinessLogic.Implementation.Students;
+using BusinessLogic.Implementation.Universities;
 using BusinessLogic.Implementation.UserAccount;
 using Common.DTOs;
 using System.Security.Claims;
@@ -20,6 +23,9 @@ namespace UniGuide.Code.ExtensionMethods
             services.AddScoped<ServiceDependencies>();
             services.AddScoped<BaseService>();
             services.AddScoped<UserService>();
+            services.AddScoped<StudentService>();
+            services.AddScoped<UniversityService>();
+            services.AddScoped<ChatService>();
 
             return services;
         }
@@ -40,9 +46,9 @@ namespace UniGuide.Code.ExtensionMethods
                     Id = id,
                     IsAuthenticated = httpContext.User.Identity.IsAuthenticated,
                     Email = claims?.FirstOrDefault(c => c.Type == "Email")?.Value,
-                    Role = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value,
-                    //PhotoId = claims?.FirstOrDefault(c => c.Type == "PhotoId")?.Value,
-                    //PhotoPath = claims.FirstOrDefault(c => c.Type == "PhotoPath")?.Value
+                    Name = claims?.FirstOrDefault(c => c.Type == "Name")?.Value,
+                    HomeCountry = claims?.FirstOrDefault(c => c.Type == "HomeCountry")?.Value,
+                    IsFirstTime = claims?.FirstOrDefault(c => c.Type == "IsFirstTime")?.Value == "true" ? true : false,
 
                 };
             });

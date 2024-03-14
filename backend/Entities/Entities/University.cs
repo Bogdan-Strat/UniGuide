@@ -17,6 +17,7 @@ namespace Domain.Entities
         public int MonthBudgetEu { get; set; }
         public int MonthBudgetNonEu { get; set; }
         public decimal AvgGrade { get; set; }
+        public string Location { get; set; }
 
         public virtual ICollection<Student> Students { get; set; }
 

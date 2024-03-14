@@ -50,6 +50,7 @@ const SignUpScreen = ({ navigation, setToken }) => {
       propertyName: 'ConfirmedPassword',
     },
   };
+  
 
   const [show, setShow] = React.useState(false);
 

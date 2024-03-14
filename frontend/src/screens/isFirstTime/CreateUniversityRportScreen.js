@@ -6,52 +6,38 @@ import Routes from "../../navigation/routes";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import CreateUniversityReportCard from "../../components/CreateUniversityReportCard";
+import { connect, useSelector } from 'react-redux';
+import { isUserAuthenticatedSelector } from "../../selectors/auth";
+import { NETWORK_IP } from "../../util/constant";
+import { tokenActionCreators as  actionCreators} from '../../store/actions/actionCreator';
 
-const data = [
-    {
-        id: 1,
-        university: 'Stockholm University',
-        isChecked: true
-    },
-    {
-        id: 2,
-        university: 'Harvard University',
-        isChecked: true
-    },
-    {
-        id: 3,
-        university: 'Massachutes Institue of Techonology',
-        isChecked: false
-    },
-    {
-        id: 4,
-        university: 'University of Bucharest',
-        isChecked: true
-    },
-    {
-        id: 5,
-        university: 'KTH Royal Institute of Technology',
-        isChecked: false
-    },
-    {
-        id: 50,
-        university: 'Amsterdam University',
-        isChecked: false
-    },
-    {
-        id: 53,
-        university: 'Imperial College London',
-        isChecked: false
-    },
-]
-
-const CreateUniversityReportScreen = ({ navigation, route }) => {
+const CreateUniversityReportScreen = ({ navigation, route, setIsFirstTime }) => {
     const { country, budget, grade } = route.params;
+    const token = useSelector(isUserAuthenticatedSelector);
 
     const [universities, setUniversities] = useState([]);
 
+    const model = {
+        grade, budget, country
+    }
     useEffect(() => {
-        setUniversities(data);
+        const getUniversities = async () => {
+            const response = await fetch(`http://${NETWORK_IP}:7262/User/getUniversitiesForCreateUniversityReport`,
+                {
+                  method: "POST",
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(model) 
+                })
+            
+            const data = await response.json();
+
+            setUniversities(data);
+        }
+
+        getUniversities();
     }, [])
 
 
@@ -70,6 +56,23 @@ const CreateUniversityReportScreen = ({ navigation, route }) => {
             // Update the state with the modified list
             setUniversities(updatedUniversities);
         }
+    }
+
+    const save = async () => {
+            const response = await fetch(`http://${NETWORK_IP}:7262/User/saveUniversityReport`,
+                {
+                  method: "POST",
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(universities) 
+                })
+            
+            if(response.ok){
+                setIsFirstTime(false);
+            }
+
     }
 
 
@@ -113,6 +116,7 @@ const CreateUniversityReportScreen = ({ navigation, route }) => {
                         _pressed={{
                             bgColor: '#005fbd',
                           }}
+                          onPress={() => save()}
                         >
                        {`Save (${universities.filter(u => u.isChecked).length} universities)`}
                     </Button>
@@ -129,4 +133,13 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreateUniversityReportScreen;
+const mapDispatchToProps = (dispatch) => {
+    return {
+      dispatch,
+      setIsFirstTime: (value) => {
+        dispatch(actionCreators.setIsFirstTime(value));
+      },
+    };
+  };
+
+export default connect(null, mapDispatchToProps)(CreateUniversityReportScreen);

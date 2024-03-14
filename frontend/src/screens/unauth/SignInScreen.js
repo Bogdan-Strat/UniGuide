@@ -121,18 +121,17 @@ const SignInScreen = ({ navigation, setToken }) => {
 
     const data = await response.json();
 
+
+
     if (data.token) {
       setToken(
         email,
         data.token,
-        JSON.stringify(data.expiration),
         data.name,
-        data.phoneNumber
+        data.isFirstTime,
+        JSON.stringify(data.expiration),
       );
-      //alert('You succesfully logged in');
-      // navigation.navigate(Routes.MAP, {
-      //   forRefresh: new Date().toString(),
-      // });
+    
       setLoginUser({ ...loginUser, email: '', password: '' });
     } else {
       setIsInvalid(true);
@@ -339,8 +338,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatch,
-    setToken: (email, token, expiration) => {
-      dispatch(actionCreators.setToken(email, token, expiration));
+    setToken: (email, token, name, isFirstTime, expiration) => {
+      dispatch(actionCreators.setToken(email, token, name, isFirstTime, expiration));
     },
   };
 };

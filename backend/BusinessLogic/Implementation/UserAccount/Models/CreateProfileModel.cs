@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Implementation.UserAccount.Models
 {
-    public class LogInModel
+    public class CreateProfileModel
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public bool AreCredentialsInvalid { get; set; } = false;
+        public string Country { get; set; }
+        public int Budget { get; set; }
+        public decimal Grade { get; set; }
     }
 }

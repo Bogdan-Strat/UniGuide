@@ -10,103 +10,47 @@ import UniversityDropdown from "../components/UniversityDropdown";
 import DomainDropdown from "../components/DomainDropdown";
 import { Animated, Easing } from 'react-native';
 import LottieView from 'lottie-react-native';
-
-const data = [
-    {
-        name: 'Bogdan Strat',
-        university: 'University of Bucharest',
-        universityId: 1,
-        domain: 'Computer Science',
-        domainId: 1,
-        phoneNumber: '+40754456778',
-        email: 'bogdan.strat@s.unibuc.ro'
-    },
-    {
-        name: 'Ion-Marian Anghelina',
-        university: 'University of Bucharest',
-        universityId: 1,
-        domain: 'Computer Science',
-        domainId: 1,
-        phoneNumber: '+40754456778',
-        email: 'ion.anghelina@s.unibuc.ro'
-    },
-    {
-        name: 'Miruna-Alexandra Avram',
-        university: 'University of Bucharest',
-        universityId: 1,
-        domain: 'Computer Science',
-        domainId: 1,
-        phoneNumber: '+40754456778',
-        email: 'mriuna.avram@s.unibuc.ro'
-    },
-    {
-        name: 'Alex Enache',
-        university: 'University of Bucharest',
-        universityId: 1,
-        domain: 'Medicine',
-        domainId: 4,
-        phoneNumber: '+40754456778',
-        email: 'alex.enache@s.unibuc.ro'
-    },
-    {
-        name: 'Alexandra Florea',
-        university: 'University of Stockholm',
-        universityId: 5,
-        domain: 'Law',
-        domainId: 2,
-        phoneNumber: '+40754456778',
-        email: 'alexandra.florea@dsv.su.se'
-    },
-]
+import { NETWORK_IP } from "../util/constant";
+import { useSelector } from "react-redux";
+import { isUserAuthenticatedSelector } from "../selectors/auth";
 
 const universities = [
-    {
-        id: 1,
-        name: "University of Bucharest"
-    },
-    {
-        id: 2,
-        name: "Harvard University"
-    },
-    {
-        id: 3,
-        name: "Massachuttes Institue of Techonology"
-    },
-    {
-        id: 4,
-        name: "Oxford University"
-    },
-    {
-        id: 5,
-        name: "University of Stockholm"
-    },
+    { id: 1, name: 'University of Oxford' },
+    { id: 2, name: 'ETH Zurich' },
+    { id: 3, name: 'Technical University of Munich' },
+    { id: 4, name: 'Sorbonne University' },
+    { id: 5, name: 'National University of Singapore' },
+    { id: 6, name: 'Fudan University' },
+    { id: 7, name: 'University of Helsinki' },
+    { id: 8, name: 'Massachusetts Institute of Technology' },
+    { id: 9, name: 'Harvard University' },
+    { id: 10, name: 'University of British Columbia' },
+    { id: 11, name: 'Indian Institute of Science' },
+    { id: 12, name: 'University of Amsterdam' },
+    { id: 13, name: 'Stanford University' },
+    { id: 14, name: 'Stockholm University' },
+    { id: 15, name: 'KTH Royal Institute of Technology' },
+    { id: 16, name: 'Uppsala University' },
+    { id: 17, name: 'University of Melbourne' },
+    { id: 18, name: 'University of São Paulo' }
 ]
 
 const domains = [
-    {
-        id: 1,
-        name: 'Computer Science'
-    },
-    {
-        id: 2,
-        name: 'Law'
-    },
-    {
-        id: 3,
-        name: 'Biology'
-    },
-    {
-        id: 4,
-        name: 'Medicine'
-    },
-    {
-        id: 5,
-        name: 'Physics'
-    },
-    {
-        id: 6,
-        name: 'Math'
-    },
+    { id: 1, name: 'Computer Science' },
+    { id: 2, name: 'Law' },
+    { id: 3, name: 'Medicine' },
+    { id: 4, name: 'Physics' },
+    { id: 5, name: 'Math' },
+    { id: 6, name: 'Journalism' },
+    { id: 7, name: 'Business' },
+    { id: 8, name: 'Arts' },
+    { id: 9, name: 'Chemistry' },
+    { id: 10, name: 'Political Science' },
+    { id: 11, name: 'Computer Engineering' },
+    { id: 12, name: 'Electrical Engineering' },
+    { id: 13, name: 'Mechanical Engineering' },
+    { id: 14, name: 'Architecture' },
+    { id: 15, name: 'Agriculture' }
 ]
 
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
@@ -118,14 +62,33 @@ const StudentScreen = ({ navigation }) => {
     const [universityId, setUniversityId] = useState(null);
     const animationProgress = useRef(new Animated.Value(0));
 
+    const token = useSelector(isUserAuthenticatedSelector);
+
     useEffect(() => {
-        setStudents(data);
-        setAllStudents(data);
+        const getStudents = async () => {
+            const response = await fetch(`http://${NETWORK_IP}:7262/Student/getStudents`,
+                {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                })
+            
+            if(response.ok){
+                const data = await response.json();
+
+                setStudents(data);
+                setAllStudents(data);
+            }
+        }
+
+        getStudents();
+ 
     }, [])
 
     useEffect(() => {
         if (domainId === null && universityId === null) {
-            setStudents(data);
+            setStudents(allStudents);
         }
         else {
             let filteredStudents = allStudents;

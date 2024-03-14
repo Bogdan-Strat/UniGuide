@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "UniGuide",
+    "scheme": "myapp",
     "slug": "UniGuide",
     "version": "1.0.0",
     "orientation": "portrait",

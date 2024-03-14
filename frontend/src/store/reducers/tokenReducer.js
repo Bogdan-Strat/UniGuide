@@ -5,7 +5,7 @@ const AuthenticationState = {
     token: "",
     expiration: "",
     name: "",
-    phoneNumber: ""
+    isFirstTime: true
 };
 
 const tokenReducer = (state = AuthenticationState, action) => {
@@ -15,10 +15,15 @@ const tokenReducer = (state = AuthenticationState, action) => {
                 ...state,
                 email: action.payload.email,
                 token: action.payload.token,
-                expiration: action.payload.expirationDate,
                 name: action.payload.name,
-                phoneNumber: action.payload.phoneNumber,
+                isFirstTime: action.payload.isFirstTime,
+                expiration: action.payload.expirationDate,
             };
+        case actions.SET_IS_FIRST_TIME: 
+            return {
+                ...state,
+                isFirstTime: action.payload.isFirstTime,
+            }
         case actions.LOGOUT:
             return AuthenticationState;
         default:

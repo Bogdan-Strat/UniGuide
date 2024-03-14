@@ -11,6 +11,7 @@ using Common.DTOs;
 using System.Text.RegularExpressions;
 using BusinessLogic.Implementation.UserAccount.Validations;
 using Common.ValidationExtensions;
+using Domain.Entities;
 
 namespace BusinessLogic.Implementation.UserAccount
 {
@@ -45,146 +46,189 @@ namespace BusinessLogic.Implementation.UserAccount
 
             return finalPassword;
         }
-        //public void SaveSalt(string salt, User user)
-        //{
-        //    var saltObject = new Salt
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Salt1 = salt,
-        //    };
 
-        //    user.Salt = saltObject;
-
-        //    //UnitOfWork.Salts.Insert(saltObject);
-        //}
         public async Task RegisterNewUser(RegisterModel registerModel)
         {
-            (await RegisterUserValidator.ValidateAsync(registerModel)).ThenThrow();
+            // (await RegisterUserValidator.ValidateAsync(registerModel)).ThenThrow();
 
             var isPasswordValid = IsPasswordValid(registerModel.Password);
 
-            var generatedSalt = GenereateSalt();
+            var user = new User()
+            {
+                Id = Guid.NewGuid(),
+                Email = registerModel.Email,
+                Name = registerModel.Name,
+                HashedPassword = registerModel.Password,
+                PhoneNumber = registerModel.PhoneNumber,
+                Budget = 0,
+                AvgGrade = 0,
+                Balance = 2,
+                HomeUniversity = "N/A",
+                IsEu = true,
+                IsFirstTime = true,
 
-            //var user = new User()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Email = registerModel.Email,
-            //    Username = registerModel.Username,
-            //    IsDeleted = false
-            //};
+            };
 
-            //SaveSalt(generatedSalt, user);
 
-            //user.PasswordHash = ComputeFinalPassword(generatedSalt, registerModel.Password);
-
-            //UnitOfWork.Users.Insert(user);
+            UnitOfWork.Users.Insert(user);
 
             await UnitOfWork.SaveChangesAsync();
         }
 
-        //public async Task<User> GetUserAccount(Guid userId)
-        //{
-        //    var user = await UnitOfWork.Users.Get()
-        //        .FirstOrDefaultAsync(u => u.Id == userId);
-
-        //    return user;
-        //}
-
         public async Task<CurrentUserDTO> Login(LogInModel model)
         {
 
-            //var user = await UnitOfWork.Users
-            //    .Get()
-            //    .Where(u => u.Email == model.Email /*|| u.Username == model.Username*/ && u.GoogleId == null && !u.IsDeleted)
-            //    .FirstOrDefaultAsync();
+            var user = await UnitOfWork.Users
+                .Get()
+                .Where(u => u.Email == model.Email && model.Password == u.HashedPassword)
+                .FirstOrDefaultAsync();
 
-            //if (user == null)
-            //{
-            //    return new CurrentUserDTO { IsAuthenticated = false };
-            //}
+            if (user == null)
+            {
+                return new CurrentUserDTO { IsAuthenticated = false };
+            }
 
-            //var salt = UnitOfWork.Salts.Get()
-            //    .FirstOrDefault(s => s.Id == user.SaltId);
-
-            //if (salt == null)
-            //{
-            //    throw new NotFoundErrorException();
-            //}
-
-            //var passwordHash = ComputeFinalPassword(salt.Salt1, model.Password);
-
-            //if (string.Equals(passwordHash, user.PasswordHash))
-            //{
-            //    return new CurrentUserDTO
-            //    {
-            //        Id = user.Id,
-            //        Email = user.Email,
-            //        Username = user.Username,
-            //        IsAuthenticated = true,
-            //    };
-            //}
-            //else
-            //{
-            //    return new CurrentUserDTO { IsAuthenticated = false };
-            //}
-            return new CurrentUserDTO { IsAuthenticated = false };
+            return new CurrentUserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                Budget = user.Budget,
+                IsFirstTime = (bool)user.IsFirstTime,
+                HomeCountry = user.HomeUniversity,
+                Grade = user.AvgGrade,
+                IsAuthenticated = true,
+            };
         }
 
-        public async Task<CurrentUserDTO> LoginAndCreateUserWithGoogleAccount(CreateAccountFromGoogleModel model)
+        public async Task<List<CreateUniversityReportModel>> GetListOfUniversitiesForCreateUniversityReport(CreateProfileModel model)
         {
-            //var user = await UnitOfWork.Users
-            //    .Get()
-            //    .Where(u => u.Email == model.Email && u.GoogleId == model.GoogleId && !u.IsDeleted)
-            //    .FirstOrDefaultAsync();
+            var countries = new List<string>
+        {
+            "Austria",
+            "Belgium",
+            "Bulgaria",
+            "Croatia",
+            "Cyprus",
+            "Czech Republic",
+            "Denmark",
+            "Estonia",
+            "Finland",
+            "France",
+            "Germany",
+            "Greece",
+            "Hungary",
+            "Ireland",
+            "Italy",
+            "Latvia",
+            "Lithuania",
+            "Luxembourg",
+            "Malta",
+            "Netherlands",
+            "Poland",
+            "Portugal",
+            "Romania",
+            "Slovakia",
+            "Slovenia",
+            "Spain",
+            "Sweden"
+        };
 
-            //if (user == null)
-            //{
-            //    var newUserWithGoogleAccount = new User()
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        Email = model.Email,
-            //        Username = model.Username,
-            //        GoogleId = model.GoogleId,
-            //        Photo = model.Photo,
-            //        IsDeleted = false
-            //    };
+            var isEU = countries.Contains(model.Country);
+            List<CreateUniversityReportModel> universities = new();
 
-            //    UnitOfWork.Users.Insert(newUserWithGoogleAccount);
+            if (isEU)
+            {
+                universities = await UnitOfWork.Universities.Get()
+                    .Select(u => new CreateUniversityReportModel()
+                    {
+                        Id = u.Id,
+                        University = u.Name,
+                        IsChecked = u.AvgGrade <= model.Grade && u.MonthBudgetEu <= model.Budget
+                    })
+                    .ToListAsync();
+            }
+            else
+            {
+                universities = await UnitOfWork.Universities.Get()
+                    .Select(u => new CreateUniversityReportModel()
+                    {
+                        Id = u.Id,
+                        University = u.Name,
+                        IsChecked = u.AvgGrade <= model.Grade && u.MonthBudgetNonEu <= model.Budget
+                    })
+                    .ToListAsync();
+            }
 
-            //    await UnitOfWork.SaveChangesAsync();
+            var user = await UnitOfWork.Users.Get()
+                .Where(u => u.Id == CurrentUser.Id)
+                .FirstOrDefaultAsync();
 
-            //    return new CurrentUserDTO
-            //    {
-            //        Id = newUserWithGoogleAccount.Id,
-            //        Email = newUserWithGoogleAccount.Email,
-            //        Username = newUserWithGoogleAccount.Username,
-            //        Photo = newUserWithGoogleAccount.Photo,
-            //        IsAuthenticated = true,
-            //    };
-            //}
 
-            //return new CurrentUserDTO
-            //{
-            //    Id = user.Id,
-            //    Email = user.Email,
-            //    Username = user.Username,
-            //    Photo = user.Photo,
-            //    IsAuthenticated = true,
-            //};
-            return new CurrentUserDTO { IsAuthenticated = false };
+            user.Budget = model.Budget;
+            user.HomeUniversity = model.Country;
+            user.AvgGrade = model.Grade;
 
+            UnitOfWork.Users.Update(user);
+            await UnitOfWork.SaveChangesAsync();
+
+            return universities;
         }
 
-        //public bool IsPasswordValid(string password)
-        //{
-        //    var lowercase = new Regex("[a-z]+");
-        //    var uppercase = new Regex("[A-Z]+");
-        //    var digit = new Regex("(\\d)+");
-        //    var symbol = new Regex("(\\W)+");
 
-        //    return (lowercase.IsMatch(password) && uppercase.IsMatch(password) && digit.IsMatch(password) && symbol.IsMatch(password));
-        //}
+        public async Task SaveUniversityReport(List<CreateUniversityReportModel> universities)
+        {
+            var user = await UnitOfWork.Users.Get()
+                .Where(u => u.Id == CurrentUser.Id)
+                .FirstOrDefaultAsync();
 
+            user.IsFirstTime = false;
+
+
+            foreach(var university in universities)
+            {
+                if (university.IsChecked)
+                {
+                    var univ = await UnitOfWork.Universities.Get()
+                        .Where(u => u.Id == university.Id)
+                        .FirstOrDefaultAsync();
+
+                    user.Universities.Add(univ);
+                }
+            }
+
+            UnitOfWork.Users.Update(user);
+            await UnitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<GetProfileModel> GetProfile()
+        {
+            var user = await UnitOfWork.Users.Get()
+                .Where(u => u.Id == CurrentUser.Id)
+                .Select(u => new GetProfileModel()
+                {
+                    Country = u.HomeUniversity,
+                    Budget = u.Budget,
+                    Grade = u.AvgGrade,
+                    Balance = u.Balance
+                })
+                .FirstOrDefaultAsync();
+
+            return user;
+        }
+
+
+        public async Task AddBalance(decimal balance)
+        {
+            var user = await UnitOfWork.Users.Get()
+                .Where(u => u.Id == CurrentUser.Id)
+                .FirstOrDefaultAsync();
+
+            user.Balance += balance;
+
+            UnitOfWork.Users.Update(user);
+            await UnitOfWork.SaveChangesAsync();
+        }
         public static bool IsPasswordValid(string password)
         {
             var lowercase = new List<char>() { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };

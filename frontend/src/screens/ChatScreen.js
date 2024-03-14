@@ -17,7 +17,7 @@ const ChatScreen = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const apikey = OPENAI_KEY;
-    console.log(apikey);
+
     const openai = new OpenAI({
         apiKey: apikey, // This is the default and can be omitted
     });
@@ -43,7 +43,7 @@ const ChatScreen = ({ route, navigation }) => {
 
             for (let i = messages.data.length - 1; i >= 0; i--) {
                 console.log(messages.data[i].content)
-                console.log(2)
+
 
                 const answer = messages.data[i].content[0].text.value;
 

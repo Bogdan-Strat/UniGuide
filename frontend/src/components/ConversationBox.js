@@ -2,7 +2,7 @@ import { Pressable, Flex, Avatar, Text, Heading } from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import Routes from '../navigation/routes';
 
-const ConversationBox = ({threadId, isLast, navigation, title, message, date}) => {
+const ConversationBox = ({ threadId, isLast, navigation, title, message, date }) => {
     return (
         <Pressable
             borderWidth={1}
@@ -13,7 +13,7 @@ const ConversationBox = ({threadId, isLast, navigation, title, message, date}) =
             mx={5}
             mt={5}
             mb={isLast ? 5 : 0}
-            onPress={() => {navigation.navigate('Chat', {thread: threadId})}}
+            onPress={() => { navigation.navigate('Chat', { thread: threadId }) }}
             _pressed={{ bgColor: "#ADD8E6" }}>
             <Flex
                 p={5}
@@ -29,7 +29,11 @@ const ConversationBox = ({threadId, isLast, navigation, title, message, date}) =
                     <Text fontSize={14}>{message.slice(0, 40) + "..."}</Text>
                     <Flex direction={'row'} alignItems={'center'} gap={2} mt={1}>
                         <Feather name="calendar" size={24} color="black" />
-                        <Text>{date}</Text>
+                        <Text>{new Date(date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        })}</Text>
                     </Flex>
                 </Flex>
             </Flex>

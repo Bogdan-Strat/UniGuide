@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Implementation.UserAccount.Models
 {
-    public class LogInModel
+    public class CreateUniversityReportModel
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public bool AreCredentialsInvalid { get; set; } = false;
+        public int Id { get; set; }
+        public string University { get; set; }
+        public bool IsChecked { get; set; }
+
     }
 }

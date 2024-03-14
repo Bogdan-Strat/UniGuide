@@ -10,13 +10,12 @@ namespace Common.DTOs
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
-        public string Username { get; set; }
+        public string Name { get; set; }
         public bool IsAuthenticated { get; set; }
-        public string Role { get; set; }
-
-        public string? Photo { get; set; }
-        //public string PhotoId { get; set; }
-        //public string PhotoPath { get; set; }
+        public bool IsFirstTime { get; set; }
+        public string HomeCountry { get; set; }
+        public int Budget { get; set; }
+        public decimal Grade { get; set; }
 
         public static implicit operator Guid(CurrentUserDTO v)
         {

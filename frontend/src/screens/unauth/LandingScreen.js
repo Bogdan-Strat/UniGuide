@@ -15,10 +15,10 @@ const LandingScreen = ({ navigation }) => {
                 <Flex px={10} pt={8} style={styles.blurImg}>
                     <Flex w={"70%"}>
                         <Heading fontSize={24} color={"rgba(255, 255, 255, 1)"}>
-                            Plan unforgettable trips
+                            Plan your inter/national student life
                         </Heading>
                         <Text color={"rgba(255, 255, 255, 1)"} fontSize={16} mt={3}>
-                            Use Traveller to discover and schedule stunning trips.
+                            Use UniGuide to discover universities and network with students.
                         </Text>
                     </Flex>
                     <Flex style={styles.buttons} mt={10}>
@@ -45,7 +45,7 @@ const LandingScreen = ({ navigation }) => {
                             </Text>
                             <Pressable onPress={() => navigation.navigate(Routes.SIGN_IN)}>
                                 {({ isPressed }) => {
-                                    console.log(isPressed);
+    
                                     return (
                                         <Text
                                             color={"rgba(151, 148, 148, 1)"}

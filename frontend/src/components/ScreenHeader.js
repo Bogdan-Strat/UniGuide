@@ -1,7 +1,6 @@
 import { Flex, IconButton, Heading, Text } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
-import Routes from '../navigation/routes';
-import { TypingAnimation } from "react-native-typing-animation";
+
 
 const ScreenHeader = ({ title, navigation, route, isHomeScreen, isProfileScreen }) => {
     return (

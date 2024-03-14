@@ -6,7 +6,7 @@ import {
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSelector } from 'react-redux';
-import { isUserAuthenticatedSelector } from '../selectors/auth.js';
+import { isUserAuthenticatedSelector, isFirstTimeSelector } from '../selectors/auth.js';
 import { Fab, IconButton } from 'native-base';
 import { Box } from 'native-base';
 import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
@@ -128,6 +128,7 @@ function BottomNav({ navigation }) {
           tabBarStyle: { position: 'absolute' },
           title: '',
           tabBarActiveTintColor: '#3399ff',
+          // unmountInactiveRoutes:true
         }}
         screenOptions={{
           showLabel: false,
@@ -138,6 +139,7 @@ function BottomNav({ navigation }) {
           component={HomeStackScreen}
           options={{
             headerShown: false,
+            unmountOnBlur: true,
             tabBarIcon: ({ focused, color, size }) => {
               return <Feather name='home' size={26} color={color} />;
             },
@@ -158,6 +160,7 @@ function BottomNav({ navigation }) {
           component={NewChatScreen}
           options={{
             headerShown: false,
+            unmountOnBlur: true,
             tabBarStyle: { display: 'none' },
             ...TransitionPresets.ModalSlideFromBottomIOS,
             tabBarIcon: ({ focused, color, size }) => {
@@ -203,6 +206,7 @@ function BottomNav({ navigation }) {
           component={ProfileScreen}
           options={{
             headerShown: false,
+            unmountOnBlur: true,
             tabBarIcon: ({ focused, color, size }) => {
               return (
                 <Ionicons
@@ -285,9 +289,12 @@ function IsFirstTimeNavigator() {
 }
 
 const MainNavigation = () => {
-  //   const authenticated = useSelector(isUserAuthenticatedSelector);
-  const authenticated = true;
-  const isFirstTime = false;
+    const authenticated = useSelector(isUserAuthenticatedSelector);
+  // const authenticated = false;
+
+  const isFirstTime = useSelector(isFirstTimeSelector);
+
+  // const isFirstTime = false;
   //const authenticated = false;
   return (
     <NavigationContainer>

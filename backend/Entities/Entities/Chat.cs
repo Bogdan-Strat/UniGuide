@@ -16,7 +16,9 @@ namespace Domain.Entities
         public string Question { get; set; } = null!;
         public string Answer { get; set; } = null!;
         public DateTime Date { get; set; }
+        public Guid UserId { get; set; }
 
+        public virtual User User { get; set; } = null!;
         public virtual ICollection<User> Users { get; set; }
     }
 }

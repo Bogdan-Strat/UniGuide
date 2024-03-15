@@ -22,10 +22,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.bogdan2405.UniGuide"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "49a0eaed-0ae0-4044-bb30-9f66672a9d88"
+      }
     }
   }
 }

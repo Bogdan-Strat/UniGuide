@@ -58,6 +58,8 @@ const ProfileScreen = ({ navigation, logout }) => {
         })
     
         if(response.ok){
+            setTimeout(() => {
+              }, 5000);
             setBalance(balance + 1000)
         }
     }

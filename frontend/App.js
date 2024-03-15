@@ -8,6 +8,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './src/store/store';
 import { MainNavigation } from './src/navigation/navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 export default function App() {
   return (

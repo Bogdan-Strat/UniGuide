@@ -1,10 +1,9 @@
-﻿using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Domain.Entities
+namespace DataAccess.Entities
 {
-    public partial class User : IEntity
+    public partial class User
     {
         public User()
         {

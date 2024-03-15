@@ -22,6 +22,7 @@ namespace DataAccess.Context
         public virtual DbSet<Student> Students { get; set; } = null!;
         public virtual DbSet<University> Universities { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<UserXchat> UserXchats { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -95,13 +96,13 @@ namespace DataAccess.Context
 
                 entity.Property(e => e.AvgGrade).HasColumnType("decimal(3, 1)");
 
+                entity.Property(e => e.Location).HasMaxLength(100);
+
                 entity.Property(e => e.MonthBudgetEu).HasColumnName("MonthBudgetEU");
 
                 entity.Property(e => e.MonthBudgetNonEu).HasColumnName("MonthBudgetNonEU");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
-
-                entity.Property(e => e.Location).HasMaxLength(100);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -112,7 +113,7 @@ namespace DataAccess.Context
 
                 entity.Property(e => e.AvgGrade).HasColumnType("decimal(3, 2)");
 
-                entity.Property(e => e.Balance).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.Balance).HasColumnType("decimal(5, 1)");
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
@@ -126,19 +127,6 @@ namespace DataAccess.Context
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(20);
 
-                //entity.HasMany(d => d.Chats)
-                //    .WithMany(p => p.Users)
-                //    .UsingEntity<Dictionary<string, object>>(
-                //        "UserXchat",
-                //        l => l.HasOne<Chat>().WithMany().HasForeignKey("ChatId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_UserXChatChat"),
-                //        r => r.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_UserXChatUser"),
-                //        j =>
-                //        {
-                //            j.HasKey("UserId", "ChatId");
-
-                //            j.ToTable("UserXChat");
-                //        });
-
                 entity.HasMany(d => d.Universities)
                     .WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
@@ -151,6 +139,13 @@ namespace DataAccess.Context
 
                             j.ToTable("UserXUniversity");
                         });
+            });
+
+            modelBuilder.Entity<UserXchat>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.ChatId });
+
+                entity.ToTable("UserXChat");
             });
 
             OnModelCreatingPartial(modelBuilder);

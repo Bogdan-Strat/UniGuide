@@ -1,10 +1,9 @@
-﻿using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Domain.Entities
+namespace DataAccess.Entities
 {
-    public partial class Chat : IEntity
+    public partial class Chat
     {
         public Guid Id { get; set; }
         public string ThreadId { get; set; } = null!;
